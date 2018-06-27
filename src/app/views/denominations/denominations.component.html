@@ -1,0 +1,177 @@
+<div class="animated fadeIn" *ngIf="denominations">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+          <div class="card-header">
+              <h5> <i class="fa fa-align-justify"></i> Denomination Lists</h5>
+              <button type="button" class="btn btn-info pull-right " data-toggle="modal" (click)="largeModal.show()">
+                 Add Denomination
+              </button>
+              <div class="form-group">
+                <input class="form-control col-sm-6" [(ngModel)]="term" placeholder="Search denominations here..." type="text">
+              </div>
+            </div>
+        <div class="card-body">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Denomination</th>
+                <th>Date registered</th>
+                <th>Description</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr  *ngFor="let denomination of denominations.data | filter :term; let i = index ;">
+                  <td>{{i + denominations.from }}</td>
+                  <td>{{denomination.name}}</td>
+                  <td>{{denomination.created_at}}</td>
+                  <td>{{denomination.description}}</td>
+                  <td>
+                      <span class="badge badge-success"><a  data-toggle="modal" (click)="editModal.show(); onedit(denomination)"><i class="fa fa-edit"></i>&nbsp;Edit</a></span>
+                         </td>
+              </tr>
+            </tbody>
+          </table>
+          <nav>
+              <ul class="pagination">
+                  <li class="page-item" *ngIf="denominations.prev_page_url"><button class="page-link" (click)="getPaginatedDenomination(denominations.prev_page_url)">Prev</button></li>
+                  <li class="page-item active">
+                      <a class="page-link" >{{denominations.current_page + '/' + denominations.last_page}}</a>
+                    </li>
+                  <li class="page-item" *ngIf="denominations.next_page_url"><button class="page-link" (click)="getPaginatedDenomination(denominations.next_page_url)">Next</button></li>
+                </ul>
+              </nav>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  </div>
+  <!-- new Denomination form  -->
+  <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-primary" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add Denomination</h4>
+            <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+      <div class="modal-body">
+         <div class="col-sm-12">
+  <!--Card in the modal-->
+           <div class="card">
+               <div class="card-header">
+                  <strong>Denomination</strong>
+                  <small>Registration FORM</small>
+                </div>
+        <div class="card-body">
+  <!--Form in the modal-->
+       <form  (ngSubmit)="onSubmit(f)" #f="ngForm" enctype="multipart/form-data" method="post">
+  
+          
+               <div class="row">
+                    <label  class="col-sm-9"></label>
+                      <div class="form-group col-sm-11">
+                        <label >Denomination Name</label>
+                        <input type="text" class="form-control"  #denName="ngModel" id="denname" placeholder="Enter Denomination Name" [(ngModel)]="denname" name="name" required>
+                      <div *ngIf="!denName.valid && denName.dirty">
+                          Denomination Name Required!
+                      </div>
+                      </div>
+                    <label  class="col-sm-9"></label>
+                      <div class="form-group col-sm-11">
+                          <label >Description</label>
+                          <input type="text" class="form-control" #desc="ngModel" id="description" placeholder="Enter Description here" [(ngModel)]="description" name="description" required>
+                        <div *ngIf="!desc.valid && desc.dirty">
+                            Description Required!
+                        </div>
+                      </div>
+                  <!-- <div class="form-group col-sm-5">
+                        <label for="name">Add Denomination Pic</label>
+                            <input  class="form-control" type="file" name ="name" id="name" [(ngModel)]="name">
+    
+                  </div> -->
+                  </div>
+                  <div class="row">
+                  <div class="form-control ">
+                    <button type="submit"  class="btn btn-primary  btn-sm pull-right" (click)="largeModal.hide()"  [disabled] ="!f.valid">ADD</button>
+                  </div>
+                </div>
+          <!--submit button-->
+  
+                <!--<button type="submit" (click)="addFile()" class="btn btn-primary">Upload</button>-->
+       </form>
+  
+  
+               </div>
+        </div>
+    </div><!--/.col-->
+  
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Edit Denomination Form -->
+    <div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Denomination Edit</h4>
+            <button type="button" class="close" (click)="editModal.hide() " aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+             <div class="col-sm-12">
+               <div class="card">
+                      <div class="card-header">
+                        <strong>Denominations</strong>
+                        <small>Edit FORM</small>
+                      </div>
+                 <div class="card-body">
+   <!--edit modal form-->
+          <form  (ngSubmit)="onupdate(edit)" #edit="ngForm" enctype="multipart/form-data" method="post">
+            <div class="row">
+              <label  class="col-sm-9"></label>
+                <div class="form-group col-sm-11">
+                  <label >Denomination Name</label>
+                  <input type="text" class="form-control"  #denName="ngModel" id="denname" placeholder="Enter Denomination Name" [(ngModel)]="denominationnew.name" name="name" required>
+                <div *ngIf="!denName.valid && denName.dirty">
+                    Denomination Name Required!
+                </div>
+                </div>
+              <label  class="col-sm-9"></label>
+                <div class="form-group col-sm-11">
+                    <label >Description</label>
+                    <input type="text" class="form-control" #desc="ngModel" id="description" placeholder="Enter Description here" [(ngModel)]="denominationnew.description" name="description" required>
+                  <div *ngIf="!desc.valid && desc.dirty">
+                      Description Required!
+                  </div>
+                </div>
+            <!-- <div class="form-group col-sm-5">
+                  <label for="name">Add Denomination Pic</label>
+                      <input  class="form-control" type="file" name ="name" id="name" [(ngModel)]="name">
+
+            </div> -->
+            </div>
+            
+              <button type="submit" class="btn btn-primary pull-left" (click)="editModal.hide()" [disabled] ="!edit.valid">Update Info</button>
+          </form>
+               <button class="btn btn-danger pull-right"  (click)="ondelete(); editModal.hide()">Delete Denomination</button>
+      
+                 </div>
+          </div>
+      </div><!--/.col-->
+  
+    </div>
+    <div class="modal-footer">
+    </div>
+    </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+  

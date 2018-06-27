@@ -1,27 +1,92 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { routing } from 'app/app.routing';
-import { AuthService } from 'app/auth.service';
-import { ChurchComponent } from './church/church.component';
+
+// Import containers
+import {
+  FullLayout,
+  SimpleLayout
+} from './containers';
+
+const APP_CONTAINERS = [
+  FullLayout,
+  SimpleLayout
+]
+
+// Import components
+import {
+  AppAside,
+  AppBreadcrumbs,
+  AppFooter,
+  AppHeader,
+  AppSidebar,
+  AppSidebarFooter,
+  AppSidebarForm,
+  AppSidebarHeader
+} from './components';
+
+const APP_COMPONENTS = [
+  AppAside,
+  AppBreadcrumbs,
+  AppFooter,
+  AppHeader,
+  AppSidebar,
+  AppSidebarFooter,
+  AppSidebarForm,
+  AppSidebarHeader
+]
+
+// Import directives
+import {
+  AsideToggleDirective,
+  NAV_DROPDOWN_DIRECTIVES,
+  SIDEBAR_TOGGLE_DIRECTIVES
+} from './directives';
+
+const APP_DIRECTIVES = [
+  AsideToggleDirective,
+  NAV_DROPDOWN_DIRECTIVES,
+  SIDEBAR_TOGGLE_DIRECTIVES
+]
+
+// Import routing module
+import { AppRoutingModule } from './app.routing';
+
+// Import 3rd party components
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { AuthService } from 'app/views/auth.service';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from 'app/views/http.service';
+import { HttpModule } from '@angular/http';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    ChurchComponent
-  ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    ChartsModule,
     FormsModule,
+    HttpClientModule,
     HttpModule,
-    routing
+    CommonModule
   ],
-  providers: [AuthService],
-  bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    ...APP_CONTAINERS,
+    ...APP_COMPONENTS,
+    ...APP_DIRECTIVES
+  ],
+  providers: [{
+    provide: LocationStrategy,
+    useClass: HashLocationStrategy
+  }, AuthService, HttpService,HttpClientModule],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

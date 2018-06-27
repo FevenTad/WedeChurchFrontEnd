@@ -1,0 +1,27 @@
+<div class="sidebar">
+  <app-sidebar-header></app-sidebar-header>
+  <app-sidebar-form></app-sidebar-form>
+  <nav class="sidebar-nav">
+    <ul class="nav">
+      <li class="nav-title">
+        Dashboard
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/users']"><i class="icon-star"></i> Users</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/roles']"><i class="icon-star"></i> Roles And Permission</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/denominations']"><i class="icon-star"></i> Denomination</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/churches']"><i class="icon-star"></i> Church</a>
+      </li>
+    </ul>
+  </nav>
+  <app-sidebar-footer></app-sidebar-footer>
+</div>
